@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  tor:
+    image: ghcr.io/yuki-js/anonymity-sandbox/tor:latest
+    build: ../images/tor
+    configs:
+      - source: tor
+        target: /etc/tor/torrc
+        mode: 0444
+    networks:
+      int-tor-proxy:
+      ext-tor:
+    deploy:
+      replicas: 1
+
+  workspace:
+    image: ghcr.io/yuki-js/anonymity-sandbox/workspace:latest
+    build: ../images/workspace
+    environment:
+      - DISPLAY
+    volumes:
+      #- /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/runtime/wayland-0:ro
+    networks:
+      - int-tor-proxy
+      - ext-tor
+    tty: true
+networks:
+  int-tor-proxy:
+    internal: true
+  ext-tor:
+    internal: false
+
+configs:
+  tor:
+    file: ../configs/torrc
