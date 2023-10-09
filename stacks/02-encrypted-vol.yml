@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  workspace:
+    volumes:
+      - source: $PWD/.volume/decrypted
+        target: /home/user/encrypted-volume
+        type: bind
+        read_only: false
