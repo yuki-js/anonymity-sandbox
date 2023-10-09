@@ -12,6 +12,7 @@ jobs:
         name:
           - workspace
           - tor
+          - encryptor
     permissions:
       packages: write
       contents: read

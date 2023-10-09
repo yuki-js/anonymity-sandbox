@@ -28,4 +28,4 @@ ENTRYPOINT ["/tini", "--"]
 
 USER user
 
-CMD ["/usr/bin/firefox"]
+CMD ["/usr/bin/firefox", "-P"]

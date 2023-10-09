@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  encryptor:
+    image: ghcr.io/yuki-js/anonymity-sandbox/encryptor:latest
+    build: ../images/encryptor
+    environment:
+      - PASSWORD=password
+    volumes:
+      - $PWD/.volume:/encdrv
+    networks:
+      - int-encryption
+    devices:
+      - "/dev/fuse"
+    cap_add:
+      - "SYS_ADMIN"
+    security_opt:
+      - "apparmor:unconfined"
+  workspace:
+    depends_on:
+      - encryptor
+    volumes:
+      - $PWD/.volume:/home/user/encdrv
+    command: ["sleep", "infinity"]
+
+networks:
+  int-encryption:
+    internal: true
