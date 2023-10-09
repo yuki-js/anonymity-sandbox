@@ -22,10 +22,9 @@ services:
     volumes:
       #- /tmp/.X11-unix:/tmp/.X11-unix:ro
       - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/runtime/wayland-0:ro
-      - /mnt/c/Users/yjsnpi/AppData/Local/Microsoft/Windows/Fonts:/usr/share/fonts/truetype/dejavu
+      - /mnt/c/Windows/Fonts:/usr/share/fonts/truetype/dejavu
     networks:
       - int-tor-proxy
-      # - ext-tor
 networks:
   int-tor-proxy:
     internal: true
