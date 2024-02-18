@@ -12,7 +12,7 @@ RUN apt update && apt install -y x11-apps bash curl git software-properties-comm
 RUN add-apt-repository ppa:mozillateam/ppa -y
 RUN echo '\nPackage: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001\n' | tee /etc/apt/preferences.d/mozilla-firefox
 RUN add-apt-repository ppa:aslatter/ppa -y
-RUN apt install -y firefox sudo alacritty libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev nautilus
+RUN apt install -y firefox sudo alacritty libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev nautilus netcat
 
 RUN mkdir -p $XDG_RUNTIME_DIR
 RUN chmod 1777 $XDG_RUNTIME_DIR
