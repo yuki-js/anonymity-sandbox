@@ -5,7 +5,6 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repos
 RUN apk add --no-cache tor nyx
 
 
-RUN adduser -D tor
 USER tor
 
 WORKDIR /home/tor

@@ -15,7 +15,7 @@ RUN add-apt-repository ppa:aslatter/ppa -y
 RUN apt install -y firefox sudo alacritty libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev nautilus netcat build-essential libssl-dev libffi-dev python3-dev python3-pip
 
 # install proxychains-ng
-RUN curl https://github.com/rofl0r/proxychains-ng/releases/download/v4.17/proxychains-ng-4.17.tar.xz -o proxychains-ng-4.17.tar.xz
+RUN curl -fSsL https://github.com/rofl0r/proxychains-ng/releases/download/v4.17/proxychains-ng-4.17.tar.xz -o proxychains-ng-4.17.tar.xz
 RUN unxz proxychains-ng-4.17.tar.xz
 RUN tar -xvf proxychains-ng-4.17.tar
 WORKDIR /proxychains-ng-4.17
