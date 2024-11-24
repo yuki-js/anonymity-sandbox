@@ -56,8 +56,9 @@ COPY userland.sh /userland.sh
 RUN chmod +x /userland.sh
 
 
-# create user
-RUN adduser --disabled-password --gecos "" user
+# create user by deleting ubuntu user and creating new user as uid 1000
+RUN userdel -r ubuntu
+RUN adduser --disabled-password --gecos "" user --uid 1000
 RUN usermod -aG sudo user
 RUN echo "user:confirm" | chpasswd
 
