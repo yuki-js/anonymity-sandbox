@@ -1,0 +1,4 @@
+#!/bin/sh
+export DONT_PROMPT_WSL_INSTALL=1
+# workaround for code running inside a container with wayland
+/usr/bin/code.orig --no-sandbox --ozone-platform=wayland ${@}

@@ -4,6 +4,8 @@ services:
   tor:
     image: ghcr.io/yuki-js/anonymity-sandbox/tor:latest
     build: ../images/tor
+    ports:
+      - "0.0.0.0:59722:22" # You can do `ssh -p 59722 user@localhost` to connect to the container
     configs:
       - source: tor
         target: /etc/tor/torrc
@@ -13,6 +15,7 @@ services:
       ext-tor:
     deploy:
       replicas: 1
+    stop_grace_period: 1s
 
   workspace:
     image: ghcr.io/yuki-js/anonymity-sandbox/workspace:latest
@@ -24,7 +27,7 @@ services:
       - https_proxy=socks5://tor:9050
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
-      - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/runtime/wayland-0:ro
+      - /mnt/wslg/runtime-dir/wayland-0:/runtime/wayland-0:ro # WSLg bug that don't create the default socket
     networks:
       - int-tor-proxy
     depends_on:
