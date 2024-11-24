@@ -27,6 +27,8 @@ services:
       - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/runtime/wayland-0:ro
     networks:
       - int-tor-proxy
+    depends_on:
+      - tor
 networks:
   int-tor-proxy:
     internal: true
