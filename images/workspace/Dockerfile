@@ -46,6 +46,7 @@ RUN chmod +x /usr/bin/code
 
 # create runtime directory
 RUN mkdir -p $XDG_RUNTIME_DIR
+RUN chown user:user $XDG_RUNTIME_DIR
 RUN chmod 1777 $XDG_RUNTIME_DIR
 
 # create launch script
@@ -65,5 +66,6 @@ RUN echo "user:confirm" | chpasswd
 WORKDIR /home/user
 
 COPY proxychains.conf /home/user/.proxychains/proxychains.conf
+RUN chown -R user:user /home/user/.proxychains/proxychains.conf
 
 CMD ["/launch.sh"]
