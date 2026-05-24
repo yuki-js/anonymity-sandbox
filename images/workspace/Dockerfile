@@ -1,4 +1,6 @@
-FROM ubuntu:24.04
+FROM ghcr.io/yuki-js/dotfiles/dotimage:latest
+
+USER root
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_US.UTF-8
@@ -8,32 +10,28 @@ ENV WAYLAND_DISPLAY wayland-0
 ENV MOZ_ENABLE_WAYLAND 1
 
 # install necessary packages
-RUN apt update && apt install -y x11-apps bash curl git software-properties-common fonts-noto-cjk
+RUN apt update && apt install -y x11-apps software-properties-common fonts-noto-cjk libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev libssl-dev libffi-dev build-essential xwayland nautilus python3-dev python3-pip netcat-openbsd 
 RUN add-apt-repository ppa:mozillateam/ppa -y
-RUN echo '\nPackage: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001\n' | tee /etc/apt/preferences.d/mozilla-firefox
 RUN add-apt-repository ppa:aslatter/ppa -y
-RUN apt install -y firefox sudo libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev libssl-dev libffi-dev
+RUN apt install -y alacritty
+RUN python3 -m pip install --break-system-packages nyx
+RUN curl -fSsL "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" -o firefox.tar.xz
+RUN tar -xJf firefox.tar.xz -C /opt
+RUN ln -sf /opt/firefox/firefox /usr/local/bin/firefox
+RUN rm firefox.tar.xz
 
 # install proxychains-ng
-RUN apt install -y build-essential
 RUN curl -fSsL https://github.com/rofl0r/proxychains-ng/releases/download/v4.17/proxychains-ng-4.17.tar.xz -o proxychains-ng-4.17.tar.xz
 RUN unxz proxychains-ng-4.17.tar.xz
-RUN tar -xvf proxychains-ng-4.17.tar
-WORKDIR /proxychains-ng-4.17
+RUN tar -xvf proxychains-ng-4.17.tar -C /tmp
+WORKDIR /tmp/proxychains-ng-4.17
 RUN ./configure --prefix=/usr --sysconfdir=/etc
 RUN make
 RUN make install
 RUN make install-config
 RUN rm -rf /proxychains-ng-4.17
 
-# install tools
-RUN apt install -y xwayland nyx alacritty nautilus python3-dev python3-pip netcat-openbsd build-essential
-
-# setup ssh server for debugging
-RUN apt install -y openssh-server ssh-import-id
 COPY sshd_config /etc/ssh/sshd_config
-RUN ssh-import-id gh:yuki-js
-RUN mkdir -p /run/sshd
 
 # install vscode for linux
 RUN curl -fSsL "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -o vscode.deb
@@ -56,16 +54,9 @@ RUN chmod +x /launch.sh
 COPY userland.sh /userland.sh
 RUN chmod +x /userland.sh
 
-
-# create user by deleting ubuntu user and creating new user as uid 1000
-RUN userdel -r ubuntu
-RUN adduser --disabled-password --gecos "" user --uid 1000
-RUN usermod -aG sudo user
-RUN echo "user:confirm" | chpasswd
-
-WORKDIR /home/user
-
 COPY proxychains.conf /home/user/.proxychains/proxychains.conf
 RUN chown -R user:user /home/user/.proxychains/proxychains.conf
+
+WORKDIR /home/user
 
 CMD ["/launch.sh"]
