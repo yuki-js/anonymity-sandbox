@@ -10,7 +10,7 @@ ENV WAYLAND_DISPLAY wayland-0
 ENV MOZ_ENABLE_WAYLAND 1
 
 # install necessary packages
-RUN apt update && apt install -y x11-apps software-properties-common fonts-noto-cjk libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev libssl-dev libffi-dev build-essential xwayland nautilus python3-dev python3-pip netcat-openbsd 
+RUN apt update && apt install -y x11-apps software-properties-common fonts-noto-cjk libfreetype6 libfontconfig1 libxcb-xfixes0 libegl1-mesa-dev libssl-dev libffi-dev build-essential xwayland nautilus python3-dev python3-pip netcat-openbsd openssh-server
 RUN add-apt-repository ppa:mozillateam/ppa -y
 RUN add-apt-repository ppa:aslatter/ppa -y
 RUN apt install -y alacritty
@@ -46,6 +46,7 @@ RUN chmod +x /usr/bin/code
 RUN mkdir -p $XDG_RUNTIME_DIR
 RUN chown user:user $XDG_RUNTIME_DIR
 RUN chmod 1777 $XDG_RUNTIME_DIR
+RUN mkdir -p /run/sshd
 
 # create launch script
 COPY launch.sh /launch.sh
