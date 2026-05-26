@@ -2,7 +2,8 @@ FROM alpine:latest
 
 EXPOSE 9050 9051 5353
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories
-RUN apk add --no-cache tor nyx socat sudo
+RUN apk add --no-cache openssh tor nyx socat sudo
+RUN ssh-keygen -A
 
 
 COPY launch.sh /launch.sh
